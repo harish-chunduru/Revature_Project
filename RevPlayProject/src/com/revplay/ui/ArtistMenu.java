@@ -1,8 +1,12 @@
 package com.revplay.ui;
 
-import com.revplay.dao.AlbumDao;
-import com.revplay.dao.ArtistDao;
-import com.revplay.dao.SongDao;
+
+import com.revplay.Dao.AlbumDao;
+import com.revplay.Dao.ArtistDao;
+import com.revplay.Dao.SongDao;
+import com.revplay.daoImpl.AlbumDaoImpl;
+import com.revplay.daoImpl.ArtistDaoImpl;
+import com.revplay.daoImpl.SongDaoImpl;
 import com.revplay.main.RevPlayApp;
 import com.revplay.model.Album;
 import com.revplay.model.Song;
@@ -15,12 +19,12 @@ import java.util.List;
 
 public class ArtistMenu {
 
-	// 🔹 DAO Layer
-    private static ArtistDao artistDao = new ArtistDao();
-    private static AlbumDao albumDao = new AlbumDao();
-    private static SongDao songDao = new SongDao();
+	//  DAO Layer
+    private static ArtistDao artistDao=new ArtistDaoImpl();
+    private static AlbumDao albumDao=new AlbumDaoImpl();
+    private static SongDao songDao=new SongDaoImpl();
 
-    // 🔹 Service Layer (constructor injection)
+    //  Service Layer (constructor injection)
     private static ArtistService artistService = new ArtistService(artistDao);
     private static AlbumService albumService = new AlbumService(albumDao);
     private static SongService songService = new SongService(songDao);
@@ -32,22 +36,22 @@ public class ArtistMenu {
             System.out.println("2. Update Profile");
             System.out.println("3. Create Album");
             System.out.println("4. Add Song to Album");
-            System.out.println("5. View My Songs");
-            System.out.println("6. View My Albums");
-            System.out.println("7. View Songs in Album");
+            System.out.println("5. My Songs");
+            System.out.println("6. My Albums");
+            System.out.println("7. Songs in Album");
             System.out.println("8. Update Song");
             System.out.println("9. Update Album");
             System.out.println("10. Delete Song");
             System.out.println("11. Delete Album");
-            System.out.println("12. View Play Count");
-            System.out.println("13. View Favorites Count");
+            System.out.println("12. Play Count");
+            System.out.println("13. Favorites Count");
             System.out.println("14. Logout");
 
-            // âœ… SAFE INPUT HANDLING
+            // Ã¢Å“â€¦ SAFE INPUT HANDLING
             String input = RevPlayApp.sc.nextLine();
 
             if (input == null || input.trim().isEmpty()) {
-                System.out.println("Please enter a choice.");
+                System.out.println("Enter a choice.");
                 continue;
             }
 
@@ -115,18 +119,18 @@ public class ArtistMenu {
             System.out.print("Album Name: ");
             String name = RevPlayApp.sc.nextLine();
 
-            // âœ… Strict date validation
+            // Ã¢Å“â€¦ Strict date validation
             System.out.print("Release Date (yyyy-MM-dd): ");
             String dateInput = RevPlayApp.sc.nextLine();
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            sdf.setLenient(false);   // â­� makes date strict
+            sdf.setLenient(false);   // Ã¢Â­ï¿½ makes date strict
 
             Date date;
             try {
                 date = sdf.parse(dateInput);
             } catch (Exception e) {
-                System.out.println("â�Œ Invalid date format! Use yyyy-MM-dd");
+                System.out.println("Ã¢ï¿½Å’ Invalid date format! Use yyyy-MM-dd");
                 return;   // STOP here
             }
 
@@ -147,7 +151,7 @@ public class ArtistMenu {
             List<Album> albums = albumService.viewMyAlbums(user.getUserId());
 
             if (albums.isEmpty()) {
-                System.out.println("â�Œ No albums found. Create album first.");
+                System.out.println("Ã¢ï¿½Å’ No albums found. Create album first.");
                 return;
             }
 
@@ -159,7 +163,7 @@ public class ArtistMenu {
             System.out.print("Album ID: ");
             int albumId = Integer.parseInt(RevPlayApp.sc.nextLine());
 
-            // ðŸ”� Validate album belongs to this artist
+            //  Validate album belongs to this artist
             boolean validAlbum = false;
             for (Album a : albums) {
                 if (a.getAlbumId() == albumId) {
@@ -169,7 +173,7 @@ public class ArtistMenu {
             }
 
             if (!validAlbum) {
-                System.out.println("â�Œ Invalid Album ID.");
+                System.out.println("Ã¢ï¿½Å’ Invalid Album ID.");
                 return;
             }
 
@@ -179,27 +183,27 @@ public class ArtistMenu {
             System.out.print("Genre: ");
             String genre = RevPlayApp.sc.nextLine();
 
-            // â�Œ Validate genre
+            //  Validate genre
             if (!genre.matches("^[a-zA-Z ,]+$")) {
-                System.out.println("â�Œ Genre should contain only letters and commas.");
+                System.out.println("Ã¢ï¿½Å’ Genre should contain only letters and commas.");
                 return;
             }
             
             System.out.print("Duration: ");
             double dur = Double.parseDouble(RevPlayApp.sc.nextLine());
 
-            // âœ… STRICT DATE VALIDATION
+            //  STRICT DATE VALIDATION
             System.out.print("Release Date (yyyy-MM-dd): ");
             String dateInput = RevPlayApp.sc.nextLine();
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            sdf.setLenient(false);   // â­� prevents invalid dates
+            sdf.setLenient(false);   // prevents invalid dates
 
             Date date;
             try {
                 date = sdf.parse(dateInput);
             } catch (Exception e) {
-                System.out.println("â�Œ Invalid date format! Use yyyy-MM-dd");
+                System.out.println("Ã¢ï¿½Å’ Invalid date format! Use yyyy-MM-dd");
                 return;   // stop upload
             }
 
@@ -211,7 +215,7 @@ public class ArtistMenu {
                 System.out.println("Song upload failed!");
 
         } catch (NumberFormatException e) {
-            System.out.println("â�Œ Duration and Album ID must be numbers.");
+            System.out.println("Ã¢ï¿½Å’ Duration and Album ID must be numbers.");
         } catch (Exception e) {
             System.out.println("Invalid input.");
         }
@@ -293,16 +297,16 @@ public class ArtistMenu {
 
     private static void updateSong(User user) {
         try {
-            // ðŸ”¹ Get songs list
+            // Get songs list
             List<Song> songs = songService.viewMySongs(user.getUserId());
 
-            // ðŸ”´ STOP if no songs
+            // STOP if no songs
             if (songs == null || songs.isEmpty()) {
                 System.out.println("No Songs Available to update.");
                 return;
             }
 
-            // ðŸ”¹ Show songs
+            // Show songs
             System.out.println("\n--- My Songs ---");
             for (Song s : songs) {
                 System.out.println(s.getSongId() + " - " + s.getTitle());
@@ -311,7 +315,7 @@ public class ArtistMenu {
             System.out.print("Song ID: ");
             int id = Integer.parseInt(RevPlayApp.sc.nextLine());
 
-            // ðŸ”´ CHECK if ID exists
+            // CHECK if ID exists
             boolean found = false;
             for (Song s : songs) {
                 if (s.getSongId() == id) {
@@ -325,16 +329,16 @@ public class ArtistMenu {
                 return;
             }
 
-            // ðŸ”¹ Ask details ONLY if ID valid
+            // Ask details ONLY if ID valid
             System.out.print("New Title: ");
             String title = RevPlayApp.sc.nextLine();
 
             System.out.print("New Genre: ");
             String genre = RevPlayApp.sc.nextLine();
 
-            // â�Œ Validate genre
+            // Validate genre
             if (!genre.matches("^[a-zA-Z ,]+$")) {
-                System.out.println("â�Œ Genre should contain only letters and commas.");
+                System.out.println("Ã¢ï¿½Å’ Genre should contain only letters and commas.");
                 return;
             }
 
@@ -342,7 +346,7 @@ public class ArtistMenu {
             System.out.print("New Duration: ");
             double dur = Double.parseDouble(RevPlayApp.sc.nextLine());
 
-            // âœ… STRICT DATE VALIDATION
+            // STRICT DATE VALIDATION
             System.out.print("New Release Date (yyyy-MM-dd): ");
             String dateInput = RevPlayApp.sc.nextLine();
 
@@ -353,7 +357,7 @@ public class ArtistMenu {
             try {
                 date = sdf.parse(dateInput);
             } catch (Exception e) {
-                System.out.println("â�Œ Invalid date format! Use yyyy-MM-dd");
+                System.out.println("Ã¢ï¿½Å’ Invalid date format! Use yyyy-MM-dd");
                 return;  // STOP update
             }
 
@@ -363,7 +367,7 @@ public class ArtistMenu {
                 System.out.println("Song not found!");
 
         } catch (NumberFormatException e) {
-            System.out.println("â�Œ Duration and Song ID must be numbers.");
+            System.out.println("Ã¢ï¿½Å’ Duration and Song ID must be numbers.");
         } catch (Exception e) {
             System.out.println("Invalid input.");
         }
@@ -372,16 +376,16 @@ public class ArtistMenu {
     private static void updateAlbum(User user) {
 
         try {
-            // ðŸ”¹ Get albums
+            // Get albums
             List<Album> albums = albumService.viewMyAlbums(user.getUserId());
 
-            // ðŸ”´ STOP if empty
+            // STOP if empty
             if (albums == null || albums.isEmpty()) {
                 System.out.println("No albums created yet.");
                 return;
             }
 
-            // ðŸ”¹ Show albums
+            // Show albums
             System.out.println("\n--- My Albums ---");
             for (Album a : albums) {
                 System.out.println(a.getAlbumId() + " - " + a.getAlbumName());
@@ -390,7 +394,7 @@ public class ArtistMenu {
             System.out.print("Album ID: ");
             int id = Integer.parseInt(RevPlayApp.sc.nextLine());
 
-            // ðŸ”´ VALIDATE ID
+            // VALIDATE ID
             boolean found = false;
             for (Album a : albums) {
                 if (a.getAlbumId() == id) {
@@ -401,10 +405,10 @@ public class ArtistMenu {
 
             if (!found) {
                 System.out.println("No album available with that ID.");
-                return; // â­� STOP HERE
+                return; // STOP HERE
             }
 
-            // ðŸ”¹ Ask new name only if ID valid
+            // Ask new name only if ID valid
             System.out.print("New Album Name: ");
             String name = RevPlayApp.sc.nextLine();
 
@@ -441,16 +445,16 @@ public class ArtistMenu {
     private static void showPlayCount(User user) {
 
         try {
-            // ðŸ”¹ Get songs of this artist
+            // Get songs of this artist
             List<Song> songs = songService.viewMySongs(user.getUserId());
 
-            // ðŸ”´ STOP if no songs
+            // STOP if no songs
             if (songs == null || songs.isEmpty()) {
                 System.out.println("No songs available.");
                 return;
             }
 
-            // ðŸ”¹ Show songs
+            // Show songs
             System.out.println("\n--- My Songs ---");
             for (Song s : songs) {
                 System.out.println(s.getSongId() + " - " + s.getTitle());
@@ -459,7 +463,7 @@ public class ArtistMenu {
             System.out.print("Song ID: ");
             int id = Integer.parseInt(RevPlayApp.sc.nextLine());
 
-            // ðŸ”´ Validate ID exists
+            // Validate ID exists
             boolean found = false;
             for (Song s : songs) {
                 if (s.getSongId() == id) {
@@ -483,16 +487,16 @@ public class ArtistMenu {
     private static void showFavoritesCount(User user) {
 
         try {
-            // ðŸ”¹ Get songs of this artist
+            // Get songs of this artist
             List<Song> songs = songService.viewMySongs(user.getUserId());
 
-            // ðŸ”´ STOP if no songs
+            // STOP if no songs
             if (songs == null || songs.isEmpty()) {
                 System.out.println("No songs available.");
                 return;
             }
 
-            // ðŸ”¹ Show songs
+            // Show songs
             System.out.println("\n--- My Songs ---");
             for (Song s : songs) {
                 System.out.println(s.getSongId() + " - " + s.getTitle());
@@ -501,7 +505,7 @@ public class ArtistMenu {
             System.out.print("Song ID: ");
             int id = Integer.parseInt(RevPlayApp.sc.nextLine());
 
-            // ðŸ”´ Validate ID
+            // Validate ID
             boolean found = false;
             for (Song s : songs) {
                 if (s.getSongId() == id) {

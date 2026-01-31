@@ -1,0 +1,85 @@
+package com.revplay.test;
+
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+
+import java.util.*;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.revplay.dao.AlbumDaoImpl;
+import com.revplay.model.Album;
+import com.revplay.service.AlbumService;
+
+public class AlbumServiceTest {
+
+    @Mock
+    private AlbumDaoImpl albumDaoImpl;
+
+    private AlbumService service;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        service = new AlbumService(albumDaoImpl);
+    }
+
+
+    @Test
+    public void testCreateAlbum() {
+        when(albumDaoImpl.createAlbum(any(Album.class))).thenReturn(true);
+
+        boolean result = service.createAlbum(1, "Hits", new Date());
+
+        assertTrue(result);
+        verify(albumDaoImpl).createAlbum(any(Album.class));
+    }
+
+
+    @Test
+    public void testViewMyAlbums() {
+        List<Album> albums = new ArrayList<Album>();
+        when(albumDaoImpl.getAlbumsByArtist(1)).thenReturn(albums);
+
+        List<Album> result = service.viewMyAlbums(1);
+
+        assertEquals(albums, result);
+        verify(albumDaoImpl).getAlbumsByArtist(1);
+    }
+
+
+    @Test
+    public void testUpdateAlbum() {
+        when(albumDaoImpl.updateAlbum(5, "NewName")).thenReturn(true);
+
+        boolean result = service.updateAlbum(5, "NewName");
+
+        assertTrue(result);
+        verify(albumDaoImpl).updateAlbum(5, "NewName");
+    }
+
+
+    @Test
+    public void testDeleteAlbum() {
+        when(albumDaoImpl.deleteAlbum(5)).thenReturn(true);
+
+        boolean result = service.deleteAlbum(5);
+
+        assertTrue(result);
+        verify(albumDaoImpl).deleteAlbum(5);
+    }
+
+
+    @Test
+    public void testFindAlbumIdByName() {
+        when(albumDaoImpl.getAlbumIdByName("Hits")).thenReturn(10);
+
+        int id = service.findAlbumIdByName("Hits");
+
+        assertEquals(10, id);
+        verify(albumDaoImpl).getAlbumIdByName("Hits");
+    }
+}

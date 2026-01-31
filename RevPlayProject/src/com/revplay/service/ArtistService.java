@@ -1,22 +1,25 @@
 package com.revplay.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.revplay.dao.ArtistDao;
+import com.revplay.Dao.ArtistDao;
+import com.revplay.daoImpl.ArtistDaoImpl;
 import com.revplay.model.Artist;
 
 public class ArtistService {
 
     private static final Logger logger = LoggerFactory.getLogger(ArtistService.class);
 
-    private ArtistDao artistDao;
+    private ArtistDao artistDao=new ArtistDaoImpl();
 
     public ArtistService(ArtistDao artistDao) {
         this.artistDao = artistDao;
     }
 
-    // 🔹 CREATE PROFILE
+    //  CREATE PROFILE
     public boolean createProfile(int userId, String bio, String genre, String social) {
 
         logger.info("Artist profile creation attempt for userId: {}", userId);
@@ -48,7 +51,7 @@ public class ArtistService {
         }
     }
 
-    // 🔹 UPDATE PROFILE
+    //  UPDATE PROFILE
     public boolean updateProfile(int userId, String bio, String genre, String social) {
 
         logger.info("Updating artist profile for userId: {}", userId);
@@ -68,7 +71,7 @@ public class ArtistService {
         }
     }
 
-    // 🔹 GET PROFILE
+    //  GET PROFILE
     public Artist getProfile(int userId) {
 
         logger.debug("Fetching artist profile for userId: {}", userId);
@@ -81,7 +84,7 @@ public class ArtistService {
         }
     }
 
-    // 🔹 PROFILE EXISTS
+    //  PROFILE EXISTS
     public boolean profileExists(int userId) {
 
         logger.debug("Checking artist profile existence for userId: {}", userId);
@@ -93,4 +96,18 @@ public class ArtistService {
             return false;
         }
     }
+    
+
+    public List<Artist> searchArtistsByName(String text) {
+
+        logger.info("Searching artists matching: {}", text);
+
+        try {
+            return artistDao.searchArtistsByName(text);
+        } catch (Exception e) {
+            logger.error("Error searching artists", e);
+            return null;
+        }
+    }
+
 }

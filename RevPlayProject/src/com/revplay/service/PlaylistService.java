@@ -5,7 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.revplay.dao.PlaylistDao;
+import com.revplay.Dao.PlaylistDao;
+import com.revplay.daoImpl.PlaylistDaoImpl;
 import com.revplay.model.Playlist;
 import com.revplay.model.Song;
 
@@ -13,13 +14,13 @@ public class PlaylistService {
 
     private static final Logger logger = LoggerFactory.getLogger(PlaylistService.class);
 
-    private PlaylistDao dao;
+    private PlaylistDao dao=new PlaylistDaoImpl();
 
     public PlaylistService(PlaylistDao dao) {
         this.dao = dao;
     }
 
-    // 🔹 CREATE PLAYLIST
+    //  CREATE PLAYLIST
     public boolean create(int userId, String name, String desc, String privacy) {
 
         logger.info("Creating playlist '{}' for userId: {}", name, userId);
@@ -46,13 +47,13 @@ public class PlaylistService {
         }
     }
 
-    // 🔹 GET USER PLAYLISTS
+    //  GET USER PLAYLISTS
     public List<Playlist> getMine(int userId) {
         logger.debug("Fetching playlists for userId: {}", userId);
         return dao.getUserPlaylists(userId);
     }
 
-    // 🔹 ADD SONG TO PLAYLIST
+    //  ADD SONG TO PLAYLIST
     public boolean addSong(int pid, int sid) {
 
         logger.info("Adding songId: {} to playlistId: {}", sid, pid);
@@ -65,7 +66,7 @@ public class PlaylistService {
         }
     }
 
-    // 🔹 REMOVE SONG
+    //  REMOVE SONG
     public boolean removeSong(int pid, int sid) {
 
         logger.warn("Removing songId: {} from playlistId: {}", sid, pid);
@@ -78,7 +79,7 @@ public class PlaylistService {
         }
     }
 
-    // 🔹 DELETE PLAYLIST
+    //  DELETE PLAYLIST
     public boolean delete(int id) {
 
         logger.warn("Deleting playlistId: {}", id);
@@ -91,7 +92,7 @@ public class PlaylistService {
         }
     }
 
-    // 🔹 UPDATE PLAYLIST
+    //  UPDATE PLAYLIST
     public boolean update(int id, String name, String desc, String privacy) {
 
         logger.info("Updating playlistId: {}", id);
@@ -104,7 +105,7 @@ public class PlaylistService {
         }
     }
 
-    // 🔹 GET SONGS IN PLAYLIST
+    //  GET SONGS IN PLAYLIST
     public List<Song> getSongsInPlaylist(int playlistId) {
 
         logger.debug("Fetching songs in playlistId: {}", playlistId);

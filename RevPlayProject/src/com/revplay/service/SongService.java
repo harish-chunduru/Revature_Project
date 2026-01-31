@@ -1,25 +1,28 @@
 package com.revplay.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.revplay.dao.SongDao;
+
+import com.revplay.Dao.SongDao;
+import com.revplay.daoImpl.SongDaoImpl;
 import com.revplay.model.Song;
 
 public class SongService {
 
     private static final Logger logger = LoggerFactory.getLogger(SongService.class);
 
-    private SongDao songDao;
+    private SongDao songDao= new SongDaoImpl();
 
     public SongService(SongDao songDao) {
         this.songDao = songDao;
     }
 
-    // ================= UPLOAD SONG =================
+    //  UPLOAD SONG 
     public boolean uploadSong(String title, String genre, double duration,
                               Date releaseDate, int artistId, int albumId) {
 
@@ -49,13 +52,13 @@ public class SongService {
         }
     }
 
-    // ================= ARTIST SONGS =================
+    //  ARTIST SONGS 
     public List<Song> viewMySongs(int artistId) {
         logger.debug("Fetching songs for artistId: {}", artistId);
         return songDao.getSongsByArtist(artistId);
     }
 
-    // ================= ALBUM SONGS =================
+    //  ALBUM SONGS 
     public List<Song> viewSongsByAlbum(int albumId) {
         logger.debug("Fetching songs for albumId: {}", albumId);
         return songDao.getSongsByAlbum(albumId);
@@ -66,7 +69,7 @@ public class SongService {
         return songDao.getSongsByAlbum(albumId);
     }
 
-    // ================= UPDATE SONG =================
+    //  UPDATE SONG 
     public boolean updateSong(int songId, String title, String genre,
                               double dur, Date date) {
 
@@ -95,13 +98,13 @@ public class SongService {
         }
     }
 
-    // ================= DELETE SONG =================
+    //  DELETE SONG 
     public boolean deleteSong(int songId) {
         logger.warn("Deleting songId: {}", songId);
         return songDao.deleteSong(songId);
     }
 
-    // ================= PLAY COUNT =================
+    //  PLAY COUNT 
     public int getPlayCount(int songId) {
         logger.debug("Fetching play count for songId: {}", songId);
         return songDao.getPlayCount(songId);
@@ -112,19 +115,19 @@ public class SongService {
         songDao.incrementPlayCount(songId);
     }
 
-    // ================= FAVORITES COUNT =================
+    //  FAVORITES COUNT 
     public int getFavoritesCount(int songId) {
         logger.debug("Fetching favorites count for songId: {}", songId);
         return songDao.getFavoritesCount(songId);
     }
 
-    // ================= ALL SONGS =================
+    //  ALL SONGS 
     public List<Song> viewAllSongs() {
         logger.debug("Fetching all songs");
         return songDao.getAllSongs();
     }
 
-    // ================= SONG EXISTS =================
+    //  SONG EXISTS 
     public boolean songExists(int songId) {
         logger.debug("Checking if song exists: {}", songId);
 
@@ -140,16 +143,28 @@ public class SongService {
         return false;
     }
 
-    // ================= BROWSING FEATURES =================
+    //  BROWSING FEATURES 
     public List<Song> getSongsByGenre(String genre) {
         logger.info("Browsing songs by genre: {}", genre);
         return songDao.getSongsByGenre(genre);
     }
 
-    public List<Song> getSongsByArtistName(String artistName) {
-        logger.info("Browsing songs by artist name: {}", artistName);
-        return songDao.getSongsByArtistName(artistName);
+    public List<Song> getSongsByArtistName(String name) {
+
+        if (!songDao.artistExists(name)) {
+            System.out.println("No artist found with that name.");
+            return new ArrayList<Song>();
+        }
+
+        List<Song> songs = songDao.getSongsByArtistName(name);
+
+        if (songs.isEmpty()) {
+            System.out.println("Artist exists but has no songs.");
+        }
+
+        return songs;
     }
+
 
     public List<Song> getSongsByAlbumName(String albumName) {
         logger.info("Browsing songs by album name: {}", albumName);
@@ -160,4 +175,10 @@ public class SongService {
         logger.info("Searching songs by title: {}", title);
         return songDao.searchSongsByTitle(title);
     }
+    
+    public List<String> searchGenres(String text) {
+        logger.info("Searching genres matching: {}", text);
+        return songDao.searchGenres(text);
+    }
+
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.revplay.dao.FavoriteDao"/>
+<fullyQualifiedTypeName name="com.revplay.dao.PlaylistDao"/>
+<fullyQualifiedTypeName name="com.revplay.dao.RecentlyPlayedDao"/>
+<fullyQualifiedTypeName name="com.revplay.dao.UserDao"/>
+<fullyQualifiedTypeName name="java.lang.Override"/>
+<fullyQualifiedTypeName name="com.revplay.dao.ArtistDao"/>
+<fullyQualifiedTypeName name="com.revplay.dao.AlbumDao"/>
+<fullyQualifiedTypeName name="com.revplay.dao.SongDao"/>
+</qualifiedTypeNameHistroy>

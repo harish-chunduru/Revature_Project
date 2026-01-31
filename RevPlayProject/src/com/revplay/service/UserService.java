@@ -3,21 +3,23 @@ package com.revplay.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.revplay.dao.UserDao;
+
+import com.revplay.Dao.UserDao;
+import com.revplay.daoImpl.UserDaoImpl;
 import com.revplay.model.User;
 
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    private UserDao userDao;
+    private UserDao userDao=new UserDaoImpl();
 
     // Constructor Injection
     public UserService(UserDao userDao) {
         this.userDao = userDao;
     }
 
-    // 🔹 REGISTER
+    //  REGISTER
     public boolean register(String username, String email, String password, String role) {
 
         logger.info("Registration attempt for username: {}, email: {}", username, email);
@@ -44,7 +46,7 @@ public class UserService {
         }
     }
 
-    // 🔹 LOGIN
+    //  LOGIN
     public User login(String input, String password) {
 
         logger.info("Login attempt for input: {}", input);
@@ -65,7 +67,7 @@ public class UserService {
         }
     }
 
-    // 🔹 VERIFY USER
+    //  VERIFY USER
     public boolean verifyUser(String email, String username) {
 
         logger.info("Verifying user: {} with email: {}", username, email);
@@ -84,7 +86,7 @@ public class UserService {
         }
     }
 
-    // 🔹 RESET PASSWORD
+    //  RESET PASSWORD
     public boolean resetPassword(String email, String newPassword) {
 
         logger.info("Password reset attempt for email: {}", email);

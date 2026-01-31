@@ -1,17 +1,19 @@
 package com.revplay.ui;
 
+import com.revplay.Dao.UserDao;
+import com.revplay.daoImpl.UserDaoImpl;
 import com.revplay.main.RevPlayApp;
 import com.revplay.model.User;
 
-import com.revplay.dao.UserDao;
+
 import com.revplay.service.UserService;
 
 public class UserMenu {
 
-    // 🔹 DAO layer
-    private static UserDao userDao = new UserDao();
+    //  DAO layer
+    private static UserDao userDao=new UserDaoImpl();
 
-    // 🔹 Service layer (constructor injection)
+    //  Service layer (constructor injection)
     private static UserService userService = new UserService(userDao);
 
     public static void register() {
@@ -27,26 +29,32 @@ public class UserMenu {
             return;
         }
 
-        System.out.print("Enter Password: ");
+        System.out.print("Password: ");
         String password = RevPlayApp.sc.nextLine();
 
         System.out.print("Role (USER/ARTIST): ");
-        String role = RevPlayApp.sc.nextLine();
+        String role = RevPlayApp.sc.nextLine().trim().toUpperCase();
+
+        if (!role.equals("USER") && !role.equals("ARTIST")) {
+            System.out.println("Invalid role. Please enter USER or ARTIST only.");
+            return;   // returns to main menu
+        }
+
 
         boolean success = userService.register(username, email, password, role);
 
         if (success)
-            System.out.println("Signup successful!");
+            System.out.println("Registration successful!");
         else
-            System.out.println("Signup failed!");
+            System.out.println("Registration failed!");
     }
 
     public static User login() {
 
-        System.out.print("Email or Username: ");
+        System.out.print("Enter Email or Username: ");
         String input = RevPlayApp.sc.nextLine();
 
-        System.out.print("Password: ");
+        System.out.print("Enter Password: ");
         String password = RevPlayApp.sc.nextLine();
 
         User user = userService.login(input, password);
@@ -55,7 +63,7 @@ public class UserMenu {
             System.out.println("Login successful!");
             return user;
         } else {
-            System.out.println("Wrong credentials!");
+            System.out.println("Invalid credentials!");
             return null;
         }
     }

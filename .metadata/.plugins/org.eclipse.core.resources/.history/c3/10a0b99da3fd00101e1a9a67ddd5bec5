@@ -1,0 +1,5 @@
+package com.revplay.dao;
+
+public interface RecentlyPlayedDao {
+
+}

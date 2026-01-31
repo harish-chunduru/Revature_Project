@@ -2,7 +2,8 @@ package com.revplay.main;
 
 import java.util.Scanner;
 
-import com.revplay.dao.UserDao;
+import com.revplay.Dao.UserDao;
+import com.revplay.daoImpl.UserDaoImpl;
 import com.revplay.model.User;
 import com.revplay.service.UserService;
 import com.revplay.ui.ArtistMenu;
@@ -13,10 +14,10 @@ public class RevPlayApp {
 
     public static Scanner sc = new Scanner(System.in);
 
-    // 🔹 DAO Layer
-    private static UserDao userDao = new UserDao();
+    // DAO Layer
+    private static UserDao userDao=new UserDaoImpl();
 
-    // 🔹 Service Layer (constructor injection)
+    // Service Layer (constructor injection)
     private static UserService userService = new UserService(userDao);
 
     public static void main(String[] args) {
@@ -32,7 +33,7 @@ public class RevPlayApp {
             String input = sc.nextLine();
 
             if (input == null || input.trim().isEmpty()) {
-                System.out.println("Please enter a choice.");
+                System.out.println("Enter a choice.");
                 continue;
             }
 
@@ -75,13 +76,13 @@ public class RevPlayApp {
         }
     }
 
-    // 🔹 Separated logic (clean design)
+    //  Separated logic (clean design)
     private static void handleForgotPassword() {
         try {
-            System.out.print("Enter your registered Email: ");
+            System.out.print("Registered Email: ");
             String email = sc.nextLine();
 
-            System.out.print("Enter your Username: ");
+            System.out.print("Username: ");
             String username = sc.nextLine();
 
             if (email.trim().isEmpty() || username.trim().isEmpty()) {
@@ -96,7 +97,7 @@ public class RevPlayApp {
                 return;
             }
 
-            System.out.print("Enter New Password: ");
+            System.out.print("New Password: ");
             String newPass = sc.nextLine();
 
             if (newPass.trim().isEmpty()) {
@@ -110,7 +111,7 @@ public class RevPlayApp {
                 System.out.println("Password reset failed.");
 
         } catch (Exception e) {
-            System.out.println("Something went wrong. Try again.");
+            System.out.println("Something went wrong. Please Try again.");
         }
     }
 }

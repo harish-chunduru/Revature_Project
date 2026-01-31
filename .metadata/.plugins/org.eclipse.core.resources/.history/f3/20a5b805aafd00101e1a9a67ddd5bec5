@@ -1,0 +1,160 @@
+package com.revplay.test;
+
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+
+import java.util.*;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.revplay.daoImpl.SongDaoImpl;
+import com.revplay.model.Song;
+import com.revplay.service.SongService;
+
+public class SongServiceTest {
+
+    @Mock
+    private SongDaoImpl songDaoImpl;
+
+    private SongService songService;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        songService = new SongService(songDaoImpl);
+    }
+
+
+    @Test
+    public void testUploadSong() {
+        when(songDaoImpl.addSong(any(Song.class))).thenReturn(true);
+
+        boolean result = songService.uploadSong("Shape", "Pop", 3.5,
+                new Date(), 1, 10);
+
+        assertTrue(result);
+        verify(songDaoImpl).addSong(any(Song.class));
+    }
+
+
+    @Test
+    public void testViewMySongs() {
+        List<Song> mockList = new ArrayList<Song>();
+        when(songDaoImpl.getSongsByArtist(1)).thenReturn(mockList);
+
+        List<Song> result = songService.viewMySongs(1);
+
+        assertEquals(mockList, result);
+        verify(songDaoImpl).getSongsByArtist(1);
+    }
+
+
+    @Test
+    public void testUpdateSong() {
+        when(songDaoImpl.updateSong(any(Song.class))).thenReturn(true);
+
+        boolean result = songService.updateSong(5, "NewTitle", "Rock", 4.0, new Date());
+
+        assertTrue(result);
+        verify(songDaoImpl).updateSong(any(Song.class));
+    }
+
+
+    @Test
+    public void testDeleteSong() {
+        when(songDaoImpl.deleteSong(5)).thenReturn(true);
+
+        boolean result = songService.deleteSong(5);
+
+        assertTrue(result);
+        verify(songDaoImpl).deleteSong(5);
+    }
+
+
+    @Test
+    public void testGetPlayCount() {
+        when(songDaoImpl.getPlayCount(2)).thenReturn(100);
+
+        int count = songService.getPlayCount(2);
+
+        assertEquals(100, count);
+        verify(songDaoImpl).getPlayCount(2);
+    }
+
+    @Test
+    public void testIncrementPlayCount() {
+        songService.incrementPlayCount(2);
+        verify(songDaoImpl).incrementPlayCount(2);
+    }
+
+
+    @Test
+    public void testGetFavoritesCount() {
+        when(songDaoImpl.getFavoritesCount(3)).thenReturn(50);
+
+        int count = songService.getFavoritesCount(3);
+
+        assertEquals(50, count);
+        verify(songDaoImpl).getFavoritesCount(3);
+    }
+
+
+    @Test
+    public void testViewAllSongs() {
+        List<Song> list = new ArrayList<Song>();
+        when(songDaoImpl.getAllSongs()).thenReturn(list);
+
+        List<Song> result = songService.viewAllSongs();
+
+        assertEquals(list, result);
+        verify(songDaoImpl).getAllSongs();
+    }
+
+
+    @Test
+    public void testSongExistsTrue() {
+        Song s = new Song();
+        s.setSongId(10);
+
+        List<Song> list = new ArrayList<Song>();
+        list.add(s);
+
+        when(songDaoImpl.getAllSongs()).thenReturn(list);
+
+        boolean exists = songService.songExists(10);
+
+        assertTrue(exists);
+    }
+
+    @Test
+    public void testSongExistsFalse() {
+        List<Song> list = new ArrayList<Song>();
+        when(songDaoImpl.getAllSongs()).thenReturn(list);
+
+        boolean exists = songService.songExists(99);
+
+        assertFalse(exists);
+    }
+
+
+    @Test
+    public void testGetSongsByGenre() {
+        when(songDaoImpl.getSongsByGenre("Pop")).thenReturn(new ArrayList<Song>());
+
+        songService.getSongsByGenre("Pop");
+
+        verify(songDaoImpl).getSongsByGenre("Pop");
+    }
+
+    @Test
+    public void testSearchSongsByTitle() {
+        when(songDaoImpl.searchSongsByTitle("Love")).thenReturn(new ArrayList<Song>());
+
+        songService.searchSongsByTitle("Love");
+
+        verify(songDaoImpl).searchSongsByTitle("Love");
+    }
+}

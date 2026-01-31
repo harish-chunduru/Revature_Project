@@ -1,0 +1,8 @@
+package com.revplay.dao;
+
+import com.revplay.model.Album;
+
+public interface AlbumDao {
+
+	public boolean createAlbum(Album album);
+}

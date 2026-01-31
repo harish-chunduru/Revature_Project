@@ -5,20 +5,21 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.revplay.dao.RecentlyPlayedDao;
+import com.revplay.Dao.RecentlyPlayedDao;
+import com.revplay.daoImpl.RecentlyPlayedDaoImpl;
 import com.revplay.model.Song;
 
 public class RecentlyPlayedService {
 
     private static final Logger logger = LoggerFactory.getLogger(RecentlyPlayedService.class);
 
-    private RecentlyPlayedDao dao;
+    private RecentlyPlayedDao dao=new RecentlyPlayedDaoImpl();
 
     public RecentlyPlayedService(RecentlyPlayedDao dao) {
         this.dao = dao;
     }
 
-    // 🔹 ADD PLAYED SONG
+    //  ADD PLAYED SONG
     public void addPlayedSong(int userId, int songId) {
 
         logger.info("Adding songId: {} to recently played for userId: {}", songId, userId);
@@ -30,7 +31,7 @@ public class RecentlyPlayedService {
         }
     }
 
-    // 🔹 GET RECENT SONGS
+    //  GET RECENT SONGS
     public List<Song> getRecentSongs(int userId) {
 
         logger.debug("Fetching recently played songs for userId: {}", userId);
