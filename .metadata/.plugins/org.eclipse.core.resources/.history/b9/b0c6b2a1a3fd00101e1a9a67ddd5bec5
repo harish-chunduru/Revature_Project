@@ -1,6 +1,0 @@
-package com.revplay.dao;
-
-public interface RecentlyPlayedDao {
-
-	public void addEntry(int userId, int songId;
-}

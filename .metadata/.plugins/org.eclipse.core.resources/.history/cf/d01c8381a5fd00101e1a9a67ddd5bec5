@@ -1,5 +1,0 @@
-package com.revplay.dao;
-
-public interface UserDao {
-
-}
